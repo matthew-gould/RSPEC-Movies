@@ -6,8 +6,7 @@ class MoviesController < ApplicationController
 
   def checkout
     movie = Movie.where(id: params[:movie_id]).first!
-    if current_user.plan > current_user.rented
-      current_user.add_checkout movie
+    if current_user.authorize_check movie
       Checkout.create!(user_id: current_user.id, movie_id: movie.id)
       head :ok
     else
@@ -17,9 +16,7 @@ class MoviesController < ApplicationController
 
   def stream
     movie = Movie.where(id: params[:movie_id]).first!
-    if current_user.plan >= 2
-      movie.streaming = true
-      movie.save!
+    if current_user.authorize_stream movie
       head :ok
     else
       render :index

@@ -53,8 +53,47 @@ describe MoviesController do
     expect(response.code.to_i).to eq 302
   end
 
-  it "can verify someone is old enough to stream/checkout movies"
-  it "can stream when users is under movie checkout maximum"
-  it "can handle when a movie doesnt exist"
+  it "can verify someone is old enough to checkout movies" do
+    user = FactoryGirl.create :user, age: 12, plan: 3
+    login user
+    movie = FactoryGirl.create :movie, rating: "PG13"
 
+    post :checkout, movie_id: movie.id
+    user.reload
+    movie.reload
+    expect(response.code.to_i).to eq 200
+    expect(user.rented).to eq 0
+    expect(movie.out).to eq false
+  end
+
+  it "can verify someone is old enough to stream movies" do
+    user = FactoryGirl.create :user, age: 12, plan: 3
+    login user
+    movie = FactoryGirl.create :movie, rating: "PG13"
+
+    post :stream, movie_id: movie.id
+    movie.reload
+    expect(response.code.to_i).to eq 200
+    expect(movie.streaming).to eq false
+  end
+
+  it "can stream when users is under movie checkout maximum" do
+    user = FactoryGirl.create :user, age: 20, plan: 3, rented: 3
+    login user
+    movie = FactoryGirl.create :movie
+
+    post :stream, movie_id: movie.id
+    movie.reload
+    expect(response.code.to_i).to eq 200
+    expect(movie.streaming).to eq true
+  end
+
+  it "can handle when a movie doesnt exist" do
+    user = FactoryGirl.create :user, age: 20, plan: 3, rented: 3
+    login user
+
+    expect do
+      post :checkout, movie_id: "asdf"
+    end.to raise_error ActiveRecord::RecordNotFound
+  end
 end
