@@ -12,7 +12,29 @@ class User < ActiveRecord::Base
     self.save!
     movie.out = true
     movie.save!
-    Checkout.create!(user_id: self.id, movie_id: movie.id)
-    binding.pry
   end
+
+  # def authorize_check (movie)
+  #   if self.rented < self.plan && self.age >= 18
+  #     add_checkout movie
+  #   elsif self.rented < self.plan && self.age >= 13 && movie.rating != "R"
+  #     add checkout movie
+  #   elsif self.rented < self.plan && self.age < 13 && movie.raiting != "R" || "PG13"
+  #     add_checkout movie
+  #   else
+  #     render :index
+  #   end
+  # end
+
+  # def authorize_stream (movie)
+  #   if self.rented < self.plan && self.age >= 18
+  #     add_checkout movie
+  #   elsif self.rented < self.plan && self.age >= 13 && movie.rating != "R"
+  #     add checkout movie
+  #   elsif self.rented < self.plan && self.age < 13 && movie.raiting != "R" || "PG13"
+  #     add_checkout movie
+  #   else
+  #     render :index
+  #   end
+  # end
 end
