@@ -16,8 +16,15 @@
 # users commonly want.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
-require 'simplecov'
-SimpleCov.start 'rails'
+if ENV['COVERAGE']
+  require 'simplecov'
+  SimpleCov.start 'rails'
+end
+
+if ENV['CI']
+  require 'coveralls'
+  Coveralls.wear!('rails')
+end
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
