@@ -21,5 +21,6 @@ group :development, :test do
   gem 'quiet_assets'
   gem 'rspec-rails'
   gem 'spring'
+  gem 'simplecov', :require => false, :group => :test
 end
 
