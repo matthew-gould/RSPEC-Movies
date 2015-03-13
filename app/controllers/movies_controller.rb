@@ -22,4 +22,14 @@ class MoviesController < ApplicationController
       render :index
     end
   end
+
+  def checkin
+    movie = Movie.where(id: params[:movie_id]).first!
+    if current_user.checkouts.find_by(movie_id: movie.id)
+      current_user.return_movie movie
+      head :ok
+    else
+      render :index
+    end
+  end
 end

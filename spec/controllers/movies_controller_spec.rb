@@ -34,7 +34,7 @@ describe MoviesController do
   end
 
   it "users with correct plan can stream movies" do
-    user = FactoryGirl.create :user, plan: 3
+    user = FactoryGirl.create :user, age: 21, plan: 3
     login user
     movie = FactoryGirl.create :movie
 
@@ -95,5 +95,23 @@ describe MoviesController do
     expect do
       post :checkout, movie_id: "asdf"
     end.to raise_error ActiveRecord::RecordNotFound
+  end
+
+  it "user can check a movie back in" do
+    user = FactoryGirl.create :user, age: 20, plan: 3
+    login user
+    movie = FactoryGirl.create :movie
+
+    post :checkout, movie_id: movie.id
+    user.reload
+    movie.reload
+    expect(user.checkouts.count).to eq 1
+
+    post :checkin, movie_id: movie.id
+    
+    user.reload
+
+    expect(user.checkouts.count).to eq 0
+
   end
 end

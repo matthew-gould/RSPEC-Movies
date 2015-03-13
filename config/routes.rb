@@ -3,11 +3,10 @@ Rails.application.routes.draw do
 
   root to: 'movies#index'
 
-  get '/movies/checkouts' => 'movies#checkouts'
   post '/movies/checkout/:movie_id' => 'movies#checkout'
 
-
-  get '/movies/streams' => 'movies#streams'
   post '/movies/stream/:movie_id' => 'movies#stream'
+
+  post '/movies/checkin/:movie_id' => 'movies#checkin'
   
 end

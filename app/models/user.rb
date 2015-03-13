@@ -14,10 +14,15 @@ class User < ActiveRecord::Base
   end
 
   def add_stream (movie)
-    movie.update! streaming: true
+    if self.plan >= 2
+      movie.update! streaming: true
+    else
+      false
+    end
   end
 
-  def age_check
+  def return_movie (movie)
+    self.checkouts.where(movie_id: movie.id).delete_all
   end
 
 
